@@ -1,2 +1,2 @@
 # Video_processing_project
-사람의 얼굴 인식 후 처리
+Recognize and post-process a person's face
