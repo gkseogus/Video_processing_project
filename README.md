@@ -4,6 +4,8 @@
 
 이미지에서 사람 얼굴을 추출 후 추출한 이미지를 변형 시키는 프로젝트 입니다.
 
+<br/><br/>
+
 # 목차
 
 - 소개
@@ -19,7 +21,11 @@
 - 라이선스
   - 프로젝트에 대한 라이선스 정보
 
+<br/><br/>
+
 # 소개
+
+<br/>
 
 ## 프로젝트 개요
 
@@ -29,10 +35,13 @@
 
 얼굴 인식 기술에 대해 흥미가 생겨 문서를 찾아 본 후 본 프로젝트를 시작 하였습니다.
 
+<br/>
+
 ## 목적과 목표
 
 이미지 안에 사람 얼굴을 추출 후 추출 한 이미지를 변경 및 적용 시킨다.
 
+<br/>
 
 ## 기술 스택 및 환경
 
@@ -40,7 +49,11 @@
 
 환경: jupyter notebook && google colab
 
+<br/><br/>
+
 # 설치 가이드
+
+<br/>
 
 ## 설치방법
 
@@ -48,18 +61,25 @@
 
 [주피터노트북](https://jupyter.org/) 설치
 
+<br/>
+
 ## 설정 및 구성
 
 구글 코랩을 사용해 이미지 업로드
 
 shape_predictor_68_face_landmarks 모델 사용
 
+<br/><br/>
 
 # 사용법
+
+<br/>
 
 ## 프로젝트 실행 방법
 
 파이썬 환경변수 설정 후 주피터 노트북으로 해당 코드 실행
+
+<br/>
 
 ## 주요 기능
 
@@ -76,6 +96,8 @@ im = cv2.imread('data/images/two-women-face.jpg')  # input image = im
 faceRects = faceDetector(im, 1)
 print("image :", im.shape, "    {} faces detected: ".format(len(faceRects)))
 ```
+
+<br/>
 
 이미지의 얼굴 좌표를 구해 해당 얼굴 부분 블러 처리하는 코드
 
@@ -99,8 +121,11 @@ plt.figure(figsize=(10,10))
 plt.imshow(im_copy[:,:,::-1]); plt.title('face blur')
 ```
 
+<br/><br/>
 
 # 라이선스
+
+<br/>
 
 ##  프로젝트에 대한 라이선스 정보
 
