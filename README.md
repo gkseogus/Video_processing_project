@@ -15,7 +15,7 @@
   - 설정 및 구성
 - 사용법
   - 프로젝트 실행 방법
-  - 예시 코드 또는 예시 사용법
+  - 주요 기능 
 - 라이선스
   - 프로젝트에 대한 라이선스 정보
 
@@ -37,139 +37,73 @@
 ## 기술 스택 및 환경
 
 기술 스택: python
-환경: jupyter notebook 
+
+환경: jupyter notebook && google colab
 
 # 설치 가이드
 
 ## 설치방법
 
+[파이썬](https://www.python.org/) 설치
+
+[주피터노트북](https://jupyter.org/) 설치
+
+## 설정 및 구성
+
+구글 코랩을 사용해 이미지 업로드
+
+shape_predictor_68_face_landmarks 모델 사용
 
 
+# 사용법
 
-# Installation
+## 프로젝트 실행 방법
 
-[(Back to top)](#table-of-contents)
+파이썬 환경변수 설정 후 주피터 노트북으로 해당 코드 실행
 
-1. Install Ruby (preferably, version >= 2.6)
-2. [Download](https://www.nerdfonts.com/font-downloads) and install a Nerd Font. Have a look at the [Nerd Font README](https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md) for installation instructions.
+## 주요 기능
 
-    *Note for `iTerm2` users - Please enable the Nerd Font at iTerm2 > Preferences > Profiles > Text > Non-ASCII font > Hack Regular Nerd Font Complete.*
+코랩에 업로드 된 이미지 파일 불러오는 코드
 
-    *Note for `HyperJS` users - Please add `"Hack Nerd Font"` Font as an option to `fontFamily` in your `~/.hyper.js` file.*
+```
+# 필요한 파일들 읽음
+faceDetector = dlib.get_frontal_face_detector()
+landmarkDetector = dlib.shape_predictor("data/models/shape_predictor_68_face_landmarks.dat")
 
-3. Install the [colorls](https://rubygems.org/gems/colorls/) ruby gem with `gem install colorls`
-
-    *Note for `rbenv` users - In case of load error when using `lc`, please try the below patch.*
-
-    ```sh
-    rbenv rehash
-    rehash
-    ```
-
-4. Enable tab completion for flags by entering following line to your shell configuration file (`~/.bashrc` or `~/.zshrc`) :
-    ```bash
-    source $(dirname $(gem which colorls))/tab_complete.sh
-    ```
-
-5. Start using `colorls` :tada:
-
-6. Have a look at [Recommended configurations](#recommended-configurations) and [Custom configurations](#custom-configurations).
-
-# Recommended configurations
-
-[(Back to top)](#table-of-contents)
-
-1. To add some short command (say, `lc`) with some flag options (say, `-l`, `-A`, `--sd`) by default, add this to your shell configuration file (`~/.bashrc`, `~/.zshrc`, etc.) :
-    ```sh
-    alias lc='colorls -lA --sd'
-    ```
-
-2. For changing the icon(s) to other unicode icons of choice (select icons from [here](https://nerdfonts.com/)), change the YAML files in a text editor of your choice (say, `subl`)
-
-    ```sh
-    subl $(dirname $(gem which colorls))/yaml
-    ```
-
-# Custom configurations
-
-[(Back to top)](#table-of-contents)
-
-You can overwrite the existing icons and colors mapping by copying the yaml files from `$(dirname $(gem which colorls))/yaml` into `~/.config/colorls`, and changing them.
-
-- To overwrite color mapping :
-
-  Please have a look at the [list of supported color names](https://github.com/sickill/rainbow#color-list). You may also use a color hex code as long as it is quoted within the YAML file and prefaced with a `#` symbol.
-
-  Let's say that you're using the dark color scheme and would like to change the color of untracked file (`??`) in the `--git-status` flag to yellow. Copy the defaut `dark_colors.yaml` and change it.
-
-  ```sh
-  cp $(dirname $(gem which colorls))/yaml/dark_colors.yaml ~/.config/colorls/dark_colors.yaml
-  ```
-
-  In the `~/.config/colorls/dark_colors.yaml` file, change the color set for `untracked` from `darkorange` to `yellow`, and save the change.
-
-  ```
-  untracked: yellow
-  ```
-
-  Or, using hex color codes:
-
-  ```
-  untracked: '#FFFF00'
-  ```
-
-- To overwrite icon mapping :
-
-  Please have a look at the [list of supported icons](https://nerdfonts.com/). Let's say you want to add an icon for swift files. Copy the default `files.yaml` and change it.
-
-  ```sh
-  cp $(dirname $(gem which colorls))/yaml/files.yaml ~/.config/colorls/files.yaml`
-  ```
-
-  In the `~/.config/colorls/files.yaml` file, add a new icon / change an existing icon, and save the change.
-
-
-  ```
-  swift: "\uF179"
-  ```
-
-- User contributed alias configurations :
-
-  - [@rjhilgefort](https://gist.github.com/rjhilgefort/51ea47dd91bcd90cd6d9b3b199188c16)
-
-
-# Updating
-
-[(Back to top)](#table-of-contents)
-
-Want to update to the latest version of `colorls`?
-
-```sh
-gem update colorls
+im = cv2.imread('data/images/two-women-face.jpg')  # input image = im
+    
+# Detect faces in the image
+faceRects = faceDetector(im, 1)
+print("image :", im.shape, "    {} faces detected: ".format(len(faceRects)))
 ```
 
-# Uninstallation
+이미지의 얼굴 좌표를 구해 해당 얼굴 부분 블러 처리하는 코드
 
-[(Back to top)](#table-of-contents)
+```
+# project #1 : 얼굴 부분을 블러링 처리
+im_copy = im.copy()
+for i in range(0, len(faceRects)):
+    x1 = faceRects[i].left()
+    y1 = faceRects[i].top()
+    x2 = faceRects[i].right()
+    y2 = faceRects[i].bottom()
 
-Want to uninstall and revert back to the old style? No issues (sob). Please feel free to open an issue regarding how we can enhance `colorls`.
+    im_face = im_copy[y1:y2+1, x1:x2+1]
+    im_face_blur = cv2.GaussianBlur(im_face, (0, 0), 3)
+    im_copy[y1:y2+1, x1:x2+1] = im_face_blur
 
-```sh
-gem uninstall colorls
+    plt.figure(figsize=(3,3))
+    plt.imshow(im_face_blur[:,:,::-1])
+    
+plt.figure(figsize=(10,10))
+plt.imshow(im_copy[:,:,::-1]); plt.title('face blur')
 ```
 
-# Contributing
 
-[(Back to top)](#table-of-contents)
+# 라이선스
 
-Your contributions are always welcome! Please have a look at the [contribution guidelines](CONTRIBUTING.md) first. :tada:
+##  프로젝트에 대한 라이선스 정보
 
-# License
-
-[(Back to top)](#table-of-contents)
-
-
-The MIT License (MIT) 2017 - [Athitya Kumar](https://github.com/athityakumar/). Please have a look at the [LICENSE.md](LICENSE.md) for more details.
-
+MIT 라이선스 사용
 
 
